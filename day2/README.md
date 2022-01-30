@@ -1,4 +1,4 @@
-# Day 2 - Sonar Sweep
+# Day 2 - Sonar Sweep Part1
 
 ## Tech
 Scala 3
@@ -9,7 +9,7 @@ sbt run
 ```
 
 # Challenge
---- Day 2: Dive! Par1 ---
+--- Day 2: Dive! Part1 ---
 
 Now, you need to figure out how to pilot this thing.
 
