@@ -1,4 +1,4 @@
-# Day 1 - Sonar Sweep
+# Day 1 - Sonar Sweep Part1
             
 ## Tech
 Scala 3
