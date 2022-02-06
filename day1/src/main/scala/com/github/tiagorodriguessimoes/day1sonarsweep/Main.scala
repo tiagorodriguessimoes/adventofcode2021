@@ -2,28 +2,35 @@ package com.github.tiagorodriguessimoes
 package day1sonarsweep
 
 import scala.io.Source
-import scala.util.{Failure, Success, Try, Using}
-import scala.io.Source
 
 @main def Main(args: String*): Unit =
 
-  def part1(tryStr: Option[String]): Option[Int] =
-    val calculateDiffBetween = tryStr.map(a =>
-      a.toSeq
-        .sliding(2)
-        .map { case Seq(x, y, _*) =>
-          y.toInt - x.toInt
-        }
-        .toList
-    )
-    calculateDiffBetween.map(a => a.count(_ > 0))
+  val tryStr =
+    scala.io.Source
+      .fromFile(s"src/main/scala/resources/input.txt")
+      .getLines()
+      .map(_.toInt)
+      .toSeq
 
-  val tryStr: Try[String] =
-    Using(Source.fromFile(s"src/main/scala/resources/input.txt"))(_.mkString)
+  println(part1(tryStr))
+  println(part2(tryStr))
 
-  tryStr match
-    case Failure(exception) => println(s"Error: ${exception.getMessage}")
-    case Success(value) => {
-      val part1Result = part1(Some(value))
-      println(s"Part 1: ${part1Result.getOrElse("No result")}")
+def calculateDiffBetweenTandNext(l: Seq[Int]): List[Int] =
+  l.sliding(2)
+    .map { case Seq(x, y, _*) =>
+      y - x
     }
+    .toList
+
+def part1(sq: Seq[Int]): Int =
+  calculateDiffBetweenTandNext(sq).count(_ > 0)
+
+def part2(sq: Seq[Int]): Int =
+  val grouping3: Seq[Int] = sq
+    .sliding(3)
+    .map { case Seq(x, y, z, _*) =>
+      z + y + x
+    }
+    .toSeq
+
+  calculateDiffBetweenTandNext(grouping3).count(_ > 0)
