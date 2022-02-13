@@ -22,7 +22,7 @@ object App extends IOApp.Simple {
 
   val inputFile = "input.csv"
 
-  val calculatePosition: Stream[IO, Unit] = {
+  val calculatePositionPart1: Stream[IO, Unit] = {
     var vertical = 0
     var horizontal = 0
     Files[IO].readAll(Path(s"src/main/resources/$inputFile"))
@@ -39,8 +39,27 @@ object App extends IOApp.Simple {
       .evalTapChunk(x => IO(println(s"$vertical,$horizontal")))
   }
 
+  val calculatePositionPart2: Stream[IO, Unit] = {
+    var aim = 0
+    var vertical = 0
+    var horizontal = 0
+    Files[IO].readAll(Path(s"src/main/resources/$inputFile"))
+      .through(text.utf8.decode)
+      .through(text.lines)
+      .map(line =>
+        FileContent(line) match {
+          case FileContent("forward", value) =>
+            horizontal += value
+            vertical += aim * value
+          case FileContent("down", value) => aim += value
+          case FileContent("up", value) => aim -= value
+          case FileContent(_, _) => ()
+        }
+      )
+      .evalTapChunk(x => IO(println(s"$vertical,$horizontal. Total: ${vertical * horizontal}")))
+  }
+
   def run: IO[Unit] =
-
-    calculatePosition.compile.drain
-
+    calculatePositionPart1.compile.drain
+    calculatePositionPart2.compile.drain
 }
